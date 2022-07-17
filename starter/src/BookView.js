@@ -1,9 +1,14 @@
+import defaultBookCover from './photos/default_book_cover.jpg';
 const BookView = ({ book, onUpdateShelf }) => {
   function htmlDecode(input){
     var e = document.createElement('div');
     e.innerHTML = input;
     return e.childNodes[0].nodeValue;
   }
+  if(!book.imageLinks)
+    book.imageLinks = {'thumbnail': defaultBookCover};
+  if(!book.imageLinks.thumbnail)
+    book.imageLinks.thumbnail = defaultBookCover;
   return (
     <li key={book.id}>
       <div className='book'>
@@ -13,6 +18,7 @@ const BookView = ({ book, onUpdateShelf }) => {
             style={{
               width: 128,
               height: 193,
+              backgroundSize: 'cover',
               backgroundImage: `url(${book.imageLinks.thumbnail})`,
             }}></div>
           <div className='book-shelf-changer'>
