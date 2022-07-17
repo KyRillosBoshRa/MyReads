@@ -24,18 +24,15 @@ function App() {
       setSearchResults(books);
   }
   const handleUpdateShelf = async (book, shelf) => {
-    console.log(shelf);
     await api.update(book, shelf);
     const newBook = book;
     newBook.shelf = shelf;
-    console.log(newBook);
     if (shelf === 'none') 
       setBooks(books.filter(b => b.id !== book.id));
     else if(!books.includes(book))
       setBooks([...books, newBook]);
     else
       setBooks(books.map(b => b.id === newBook.id ? newBook : b));
-    console.log(books);
   }
   return (
     <Routes>
@@ -52,6 +49,7 @@ function App() {
           onSearch={handleSearch}
           onUpdateShelf={handleUpdateShelf}
           searchResults={searchResults}
+          books={books}
         />
       }>
       </Route>

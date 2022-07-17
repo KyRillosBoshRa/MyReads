@@ -1,10 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BookView from "./BookView";
-const Search = ({searchResults, onSearch, onUpdateShelf}) => {
+const Search = ({books, searchResults, onSearch, onUpdateShelf}) => {
+  const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
-    onSearch('');
-  }, [])
+    onSearch(searchValue);
+  }, [searchValue])
+  const handleInBooks = (book) => {
+    const newBooks = books.filter(b => b.id === book.id);
+    if(newBooks.length > 0)
+      return newBooks[0];
+    book.shelf = 'none';
+    return book;
+  }
   return (
     <div className="search-books">
       <div className="search-books-bar">
@@ -15,14 +23,16 @@ const Search = ({searchResults, onSearch, onUpdateShelf}) => {
           <input
             type="text"
             placeholder="Search by title, author, or ISBN"
-            onChange={(event) => onSearch(event.target.value)}
-          />
+            value={searchValue}
+            onChange={e => setSearchValue(e.target.value)}
+            />
         </div>
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
         {
           searchResults.map((book) => (
+            book = handleInBooks(book),
             <BookView book={book} onUpdateShelf={onUpdateShelf} key={book.id} />
           ))
         }
